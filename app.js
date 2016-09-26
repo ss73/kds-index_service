@@ -3,19 +3,24 @@ var app = express();
 var fs = require('fs');
 var path = require('path');
 var helios = require('helios');
+var bodyParser = require('body-parser')
 
-app.use(express.bodyParser());
+//app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/*+json' }))
+app.use(bodyParser.urlencoded({ type: 'application/x-www-form-urlencoded', extended: false }))
 
 app.get('/', function (req, res) {
     // Send usage information (static HTML)
+    res.send("Usage:");
 });
 
 app.get('/upload', function(req, res) {
-    res.send("Perfrom HTTP POST with a JSON body");
+    res.sendFile(path.join(__dirname, 'views/upload.html'));
 }); 
 
 app.post('/upload', function(req, res) {
-    var json = JSON.parse(req.body);
+    console.log('Request type: ' + req.type);
+    var json = req.body;
     var id = json.id;
     var title = json.title;
     // Remove any control characters
@@ -61,7 +66,7 @@ app.get('/find/:query', function(req, res){
             var row = result_json.response.docs[rownum];
             var id = row.id;
             var title = row.title_s;
-            var text = row.content_txt.toString().substring(0, 200);
+            var text = new String(row.content_txt).substring(0, 400);
             presentation.push({id : id, title : title, text : text});
         }
         res.send(JSON.stringify(presentation));

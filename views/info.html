@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Index Service</title>
+    </head>
+    <body>
+        <h1>Index Service</h1>
+        This service provides a facade to a Solr indexing server.
+        A Solar instance is assumed to be found at:
+        <ul>
+            <li>Host: solr</li>
+            <li>Port: 32772</li>
+            <li>Core: docs</li>
+        </ul>
+        <h2>Endpoints</h2>
+        <h3>/</h3>
+        This information page.
+        <h3>/upload</h3>
+        Upload JSON or form data to the index. If the endpoint is accessed
+        using GET, a <a href="/upload">form</a> will be displayed which will
+        post the following parameters:
+        <ul>
+            <li>id : A unique identifier for the document</li>
+            <li>title : A document title</li>
+            <li>content : The plain text version of the document</li>
+        </ul>
+        The document content will be fully indexed when uploaded. Application
+        access to the service should typically not use the form itself, but
+        POST the JSON representation of the above as the body, for example:
+        <p>
+            <code>
+                {"id" : "1234-1234-1234-1234", 
+                 "title" : "A sample title",
+                 "content" : "Full text content goes here..."}
+            </code>
+        </p>
+        <h3>/find/:query</h3>
+        Returns a JSON list of documents matching the query. The underlying
+        Solr implementation uses the <em>edismax</em> search algorithm which
+        performs a "google-like" search. The :query parameter should be sent
+        using the GET method 
+    </body>
+</html>

@@ -10,8 +10,7 @@ app.use(bodyParser.json({ type: 'application/*+json' }))
 app.use(bodyParser.urlencoded({ type: 'application/x-www-form-urlencoded', extended: false }))
 
 app.get('/', function (req, res) {
-    // Send usage information (static HTML)
-    res.send("Usage:");
+    res.sendFile(path.join(__dirname, 'views/info.html'));
 });
 
 app.get('/upload', function(req, res) {

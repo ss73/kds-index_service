@@ -5,6 +5,12 @@ var path = require('path');
 var helios = require('helios');
 var bodyParser = require('body-parser')
 
+var solr_host = process.env.SOLR_PORT_8983_TCP_ADDR == null ? 
+    "localhost" : process.env.SOLR_PORT_8983_TCP_ADDR;
+var solr_port = process.env.SOLR_PORT_8983_TCP_PORT == null ? 
+    8983 : process.env.SOLR_PORT_8983_TCP_PORT;
+var solr_index = "/solr/archive";
+
 //app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/*+json' }))
 app.use(bodyParser.urlencoded({ type: 'application/x-www-form-urlencoded', extended: false }))
@@ -26,9 +32,9 @@ app.post('/upload', function(req, res) {
     var content = json.content.replace(/[\x00-\x1F\x7F-\x9F]/g, " ");
 
     var solr_client = new helios.client({
-        host : '192.168.99.100',  
-        port : 32772,
-        path : '/solr/gettingstarted', // Insert your client solr path 
+        host : solr_host,  
+        port : solr_port,
+        path : solr_index, // Insert your client solr path 
         timeout : 1000  // Optional request timeout 
     });
     var solrdoc = new helios.document();
@@ -45,9 +51,9 @@ app.post('/upload', function(req, res) {
 
 app.get('/find/:query', function(req, res){
     var solr_client = new helios.client({
-        host : '192.168.99.100',  
-        port : 32772,
-        path : '/solr/gettingstarted', // Insert your client solr path 
+        host : solr_host,  
+        port : solr_port,
+        path : solr_index, // Insert your client solr path 
         timeout : 1000  // Optional request timeout 
     });
     solr_client.select({
@@ -55,10 +61,8 @@ app.get('/find/:query', function(req, res){
         q : req.params.query,
         rows : 25,
         wt : "json"
-        // and so on 
     }, function(err, result) {
         if (err) console.log(err);
-        //console.log(result);
         var result_json = JSON.parse(result); // have to JSON.parse the res 
         var presentation = [];
         for (var rownum in result_json.response.docs) {

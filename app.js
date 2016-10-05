@@ -12,8 +12,8 @@ var solr_port = process.env.SOLR_PORT_8983_TCP_PORT == null ?
 var solr_index = "/solr/archive";
 
 //app.use(bodyParser.json());
-app.use(bodyParser.json({ type: 'application/*+json' }))
-app.use(bodyParser.urlencoded({ type: 'application/x-www-form-urlencoded', extended: false }))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'views/info.html'));
@@ -24,7 +24,7 @@ app.get('/upload', function(req, res) {
 }); 
 
 app.post('/upload', function(req, res) {
-    console.log('Request type: ' + req.type);
+    console.log('Request type: ' + req.headers['content-type']);
     var json = req.body;
     var id = json.id;
     var title = json.title;
@@ -34,7 +34,7 @@ app.post('/upload', function(req, res) {
     var solr_client = new helios.client({
         host : solr_host,  
         port : solr_port,
-        path : solr_index, // Insert your client solr path 
+        path : solr_index, 
         timeout : 1000  // Optional request timeout 
     });
     var solrdoc = new helios.document();
@@ -53,7 +53,7 @@ app.get('/find/:query', function(req, res){
     var solr_client = new helios.client({
         host : solr_host,  
         port : solr_port,
-        path : solr_index, // Insert your client solr path 
+        path : solr_index,
         timeout : 1000  // Optional request timeout 
     });
     solr_client.select({
@@ -72,7 +72,7 @@ app.get('/find/:query', function(req, res){
             var text = new String(row.content_txt).substring(0, 400);
             presentation.push({id : id, title : title, text : text});
         }
-        res.send(JSON.stringify(presentation));
+        res.json(presentation);
     });
 });
 

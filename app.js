@@ -76,6 +76,6 @@ app.get('/find/:query', function(req, res){
     });
 });
 
-app.listen(3000, function () {
-    console.log('index access service listening on port 3000');
+app.listen(32600, function () {
+    console.log('index access service listening on port 32600');
 });

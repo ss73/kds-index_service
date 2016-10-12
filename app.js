@@ -46,7 +46,7 @@ app.post('/upload', function(req, res) {
     solr_client.addDoc(solrdoc, true, function(err) {
         if (err) console.log(err);
     });
-    res.send("OK\n");
+    res.send();
 });
 
 app.get('/find/:query', function(req, res){

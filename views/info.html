@@ -7,9 +7,15 @@
         This service provides a facade to a Solr indexing server.
         A Solar instance is assumed to be found at:
         <ul>
-            <li>Host: solr</li>
-            <li>Port: 32772</li>
-            <li>Core: docs</li>
+            <li>
+                <strong>Host</strong>: environment variable <code>SOLR_PORT_8983_TCP_ADDR</code>
+                Default value is <code>localhost</code> if not set.
+            </li>
+            <li>
+                <strong>Port</strong>: environment variable <code>SOLR_PORT_8983_TCP_PORT</code>
+                Default value is <code>8983</code> if not set.
+            </li>
+            <li><strong>Core</strong>: archive</li>
         </ul>
         <h2>Endpoints</h2>
         <h3>/</h3>

@@ -44,9 +44,9 @@ app.post('/upload', function(req, res) {
  
     // Document, commit <true|false>, callback
     solr_client.addDoc(solrdoc, true, function(err) {
-        if (err) console.log(err);
+        if (err) console.log("Solr error: " + err);
     });
-    res.send();
+    res.send({});
 });
 
 app.get('/find/:query', function(req, res){
